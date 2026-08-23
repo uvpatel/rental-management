@@ -10,7 +10,7 @@ import {
 import { organizations } from "../organization/organizations";
 import { addresses } from "../organization/addresses";
 import { productVariants } from "../catalog/product-variants";
-import { user } from "@/db/schema/auth/users";
+import { user } from "../auth/users";
 
 import { stockMovementTypeEnum } from "../shared/enums";
 

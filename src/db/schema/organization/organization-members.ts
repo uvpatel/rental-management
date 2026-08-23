@@ -7,7 +7,7 @@ import {
   index,
 } from "drizzle-orm/pg-core";
 
-import { user } from "@/db/schema/auth/users";
+import { user } from "../auth/users";
 import { organizations } from "./organizations";
 import { organizationMemberRoleEnum } from "../shared/enums";
 

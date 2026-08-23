@@ -11,7 +11,8 @@ import {
   organizationStatusEnum,
 } from "../shared/enums";
 
-import { timestamps } from "@/db/schema/shared/columns";
+import { timestamps } from "../shared/columns";
+
 
 export const organizations = pgTable(
   "organizations",
