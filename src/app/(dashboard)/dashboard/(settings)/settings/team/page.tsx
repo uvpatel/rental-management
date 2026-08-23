@@ -1,8 +1,9 @@
+import TeamShowcase from '@/components/team-section'
 import React from 'react'
 
 export default function TeamPage() {
   return (
-    <div>TeamPage
+    <div>
 
       {/* Team
 
@@ -11,6 +12,8 @@ export default function TeamPage() {
 Name        Email             Role
 Urvil       ...               Owner
 Darshan     ...               Staff */}
+
+  <TeamShowcase />
     </div>
   )
 }
