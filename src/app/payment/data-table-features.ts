@@ -1,8 +1,6 @@
-import React from 'react'
 import {
   columnFilteringFeature,
   columnVisibilityFeature,
-  createColumnHelper,
   createFilteredRowModel,
   createPaginatedRowModel,
   createSortedRowModel,
@@ -33,56 +31,3 @@ export const features = tableFeatures({
 // Pass this as the first generic argument to `ColumnDef`, `Column`, `Table`,
 // and `Row` so each type knows which feature APIs are available.
 export type DataTableFeatures = typeof features
-
-
-export type Payment = {
-  id: string
-  amount: number
-  status: "pending" | "processing" | "success" | "failed"
-  email: string
-}
-
-const columnHelper = createColumnHelper<DataTableFeatures, Payment>()
- 
-export const columns = columnHelper.columns([
-  columnHelper.accessor("status", {
-    header: "Status",
-  }),
-  columnHelper.accessor("email", {
-    header: "Email",
-  }),
-  columnHelper.accessor("amount", {
-    header: "Amount",
-  }),
-])
-
-
-export default function InvoicePage() {
-  return (
-    <div>InvoicePage
-
-      {/* Invoices
-
-Invoice    Customer    Total    Paid    Balance    Status
-INV-001    ABC Ltd     ₹17K     ₹10K    ₹7K        Partial
-
-
-filter
-
-Draft
-Unpaid
-Partial
-Paid
-Overdue
-Date
-Customer
-*/}
-
-
-
-
-
-
-    </div>
-  )
-}

@@ -8,6 +8,8 @@ Create Product
 
 export default function NewProductPage() {
   return (
-    <div>NewProductPage</div>
+    <div>
+      
+    </div>
   )
 }
