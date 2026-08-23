@@ -10,7 +10,7 @@ import {
 import { organizations } from "../organization/organizations";
 import { addresses } from "../organization/addresses";
 import { productVariants } from "../catalog/product-variants";
-import { users } from "@/db/schema/auth/users.schema";
+import { user } from "@/db/schema/auth/users";
 
 import { stockMovementTypeEnum } from "../shared/enums";
 
@@ -47,7 +47,7 @@ export const stockMovements = pgTable(
     notes: text("notes"),
 
     performedBy: text("performed_by")
-      .references(() => users.id),
+      .references(() => user.id),
 
     createdAt: timestamp("created_at", {
       withTimezone: true,

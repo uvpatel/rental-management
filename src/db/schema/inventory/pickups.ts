@@ -9,7 +9,7 @@ import {
 
 import { rentalOrders } from "../rental/rental-orders";
 import { organizations } from "../organization/organizations";
-import { users } from "../auth/users.schema";
+import { user } from "../auth/users";
 import { pickupStatusEnum } from "../shared/enums";
 import { timestamps } from "../shared/columns";
 
@@ -49,7 +49,7 @@ export const pickups = pgTable(
     instructions: text("instructions"),
 
     processedBy: text("processed_by")
-      .references(() => users.id),
+      .references(() => user.id),
 
     ...timestamps,
   },

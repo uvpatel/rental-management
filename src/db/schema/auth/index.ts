@@ -1,3 +1,4 @@
-export * from "./users.schema";
-export * from "./account.schema";
-export * from "./sessions.schema";
+export * from "./users"
+export * from "./accounts"
+export * from "./sessions"
+export * from "./verification"

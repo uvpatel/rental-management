@@ -7,7 +7,7 @@ import {
   index,
 } from "drizzle-orm/pg-core";
 
-import { users } from "@/db/schema/auth/users.schema";
+import { user } from "@/db/schema/auth/users";
 import { organizations } from "./organizations";
 import { organizationMemberRoleEnum } from "../shared/enums";
 
@@ -26,7 +26,7 @@ export const organizationMembers = pgTable(
 
     userId: text("user_id")
       .notNull()
-      .references(() => users.id, {
+      .references(() => user.id, {
         onDelete: "cascade",
       }),
 

@@ -6,7 +6,7 @@ import {
   index,
 } from "drizzle-orm/pg-core";
 
-import { users } from "../auth/users.schema";
+import { user } from "../auth/users";
 import { notificationTypeEnum } from "../shared/enums";
 
 export const notifications = pgTable(
@@ -18,7 +18,7 @@ export const notifications = pgTable(
 
     userId: text("user_id")
       .notNull()
-      .references(() => users.id, {
+      .references(() => user.id, {
         onDelete: "cascade",
       }),
 
