@@ -5,6 +5,15 @@ import { Card, CardAction, CardDescription, CardFooter, CardHeader, CardTitle } 
 import { TrendingUpIcon } from 'lucide-react'
 import React from 'react'
 
+/* 
+Quotations
+
+                         [+ New Quotation]
+
+Quotation   Customer    Rental Period   Total     Status
+Q-001       ABC Ltd     Aug 25-28       ₹...      Draft
+*/
+
 export default function QuotationsPage() {
   return (
     <div className="flex flex-1 flex-col gap-2 m-4">
