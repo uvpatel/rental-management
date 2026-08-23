@@ -26,7 +26,7 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "#",
+      url: "/dashboard",
       icon: (
         <LayoutDashboardIcon
         />
@@ -34,7 +34,7 @@ const data = {
     },
     {
       title: "Lifecycle",
-      url: "#",
+      url: "/dashboard/lifecycle",
       icon: (
         <ListIcon
         />
@@ -42,7 +42,7 @@ const data = {
     },
     {
       title: "Analytics",
-      url: "#",
+      url: "/dashboard/analytics",
       icon: (
         <ChartBarIcon
         />
@@ -50,7 +50,7 @@ const data = {
     },
     {
       title: "Projects",
-      url: "#",
+      url: "/dashboard/projects",
       icon: (
         <FolderIcon
         />
@@ -58,7 +58,7 @@ const data = {
     },
     {
       title: "Team",
-      url: "#",
+      url: "/dashboard/team",
       icon: (
         <UsersIcon
         />
@@ -186,7 +186,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               render={<a href="#" />}
             >
               <CommandIcon className="size-5!" />
-              <span className="text-base font-semibold">Acme Inc.</span>
+              <span className="text-base font-semibold">RentalFlow Inc.</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
