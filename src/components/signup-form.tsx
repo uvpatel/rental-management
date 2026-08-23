@@ -1,3 +1,4 @@
+"use client"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -9,16 +10,102 @@ import {
   FieldSeparator,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import { GitGraphIcon } from "lucide-react"
+import { FormEvent, useState } from "react"
+import { useRouter } from "next/navigation"
+import Link from "next/link"
+import { authClient } from "@/lib/auth-client"
+
 
 export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const router = useRouter()
+
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+
+  const [error, setError] = useState<string | null>(null)
+  const [isPending, setIsPending] = useState(false)
+  const [isGitHubPending, setIsGitHubPending] = useState(false)
+
+  const isLoading = isPending || isGitHubPending
+
+  async function handleEmailSignup(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    setError(null)
+
+    const normalizedName = name.trim()
+    const normalizedEmail = email.trim().toLowerCase()
+
+    if (!normalizedName) {
+      setError("Please enter your full name.")
+      return
+    }
+
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters long.")
+      return
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.")
+      return
+    }
+
+    setIsPending(true)
+
+    try {
+      const { error } = await authClient.signUp.email({
+        name: normalizedName,
+        email: normalizedEmail,
+        password,
+        callbackURL: `${window.location.origin}/dashboard`,
+      })
+
+      if (error) {
+        setError(error.message || "Unable to create your account.")
+        return
+      }
+
+      router.push("/dashboard")
+      router.refresh()
+    } catch {
+      setError("Something went wrong. Please try again.")
+    } finally {
+      setIsPending(false)
+    }
+  }
+
+  async function handleGitHubSignup() {
+    setError(null)
+    setIsGitHubPending(true)
+
+    try {
+      const { error } = await authClient.signIn.social({
+        provider: "github",
+        callbackURL: `${window.location.origin}/dashboard`,
+        errorCallbackURL: `${window.location.origin}/signup?error=github`,
+      })
+
+      if (error) {
+        setError(error.message || "GitHub authentication failed.")
+        setIsGitHubPending(false)
+      }
+    } catch {
+      setError("Unable to connect to GitHub.")
+      setIsGitHubPending(false)
+    }
+  }
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <form className="p-6 md:p-8">
+          <form className="p-6 md:p-8" onSubmit={handleEmailSignup}>
             <FieldGroup>
               <div className="flex flex-col items-center gap-2 text-center">
                 <h1 className="text-2xl font-bold">Create your account</h1>
@@ -27,11 +114,27 @@ export function SignupForm({
                 </p>
               </div>
               <Field>
+                <FieldLabel htmlFor="name">Full name</FieldLabel>
+                <Input
+                  id="name"
+                  name="name"
+                  type="text"
+                  autoComplete="name"
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
+                  required
+                />
+              </Field>
+              <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
                   id="email"
                   type="email"
+                  name="email"
+                  autoComplete="email"
                   placeholder="m@example.com"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
                   required
                 />
                 <FieldDescription>
@@ -43,34 +146,62 @@ export function SignupForm({
                 <Field className="grid grid-cols-2 gap-4">
                   <Field>
                     <FieldLabel htmlFor="password">Password</FieldLabel>
-                    <Input id="password" type="password" required />
+                    <Input
+                      id="password"
+                      name="password"
+                      type="password"
+                      autoComplete="new-password"
+                      minLength={8}
+                      value={password}
+                      onChange={(event) => setPassword(event.target.value)}
+                      required
+                    />
                   </Field>
                   <Field>
                     <FieldLabel htmlFor="confirm-password">
                       Confirm Password
                     </FieldLabel>
-                    <Input id="confirm-password" type="password" required />
+                    <Input
+                      id="confirm-password"
+                      name="confirmPassword"
+                      type="password"
+                      autoComplete="new-password"
+                      minLength={8}
+                      value={confirmPassword}
+                      onChange={(event) => setConfirmPassword(event.target.value)}
+                      required
+                    />
                   </Field>
                 </Field>
                 <FieldDescription>
                   Must be at least 8 characters long.
                 </FieldDescription>
               </Field>
+              {error && (
+                <p className="text-sm text-destructive" role="alert" aria-live="polite">
+                  {error}
+                </p>
+              )}
               <Field>
-                <Button type="submit">Create Account</Button>
+                <Button type="submit" disabled={isLoading}>
+                  {isPending ? "Creating account..." : "Create Account"}
+                </Button>
               </Field>
               <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
                 Or continue with
               </FieldSeparator>
               <Field className="grid grid-cols-3 gap-4">
-                <Button variant="outline" type="button">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path
-                      d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"
-                      fill="currentColor"
-                    />
-                  </svg>
-                  <span className="sr-only">Sign up with Apple</span>
+                <Button
+                  variant="outline"
+                  type="button"
+                  onClick={handleGitHubSignup}
+                  disabled={isLoading}
+                  aria-label="Sign up with GitHub"
+                >
+                  <GitGraphIcon />
+                  <span className="sr-only">
+                    {isGitHubPending ? "Connecting..." : "Sign up with GitHub"}
+                  </span>
                 </Button>
                 <Button variant="outline" type="button">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -92,13 +223,13 @@ export function SignupForm({
                 </Button>
               </Field>
               <FieldDescription className="text-center">
-                Already have an account? <a href="#">Sign in</a>
+                Already have an account? <Link href="/signin">Sign in</Link>
               </FieldDescription>
             </FieldGroup>
           </form>
           <div className="relative hidden bg-muted md:block">
             <img
-              src="/placeholder.svg"
+              src="/rental.png"
               alt="Image"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
             />
