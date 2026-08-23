@@ -20,18 +20,32 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { ChevronsUpDownIcon, SparklesIcon, BadgeCheckIcon, CreditCardIcon, BellIcon, LogOutIcon } from "lucide-react"
+import { authClient } from "@/lib/auth-client"
 
-export function NavUser({
-  user,
-}: {
-  user: {
-    name: string
-    email: string
-    avatar: string
-  }
-}) {
+import { ChevronsUpDownIcon, SparklesIcon, BadgeCheckIcon, CreditCardIcon, BellIcon, LogOutIcon } from "lucide-react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { ModeToggle } from "./toggle"
+
+export function NavUser() {
   const { isMobile } = useSidebar()
+  const router = useRouter()
+  const { data: session, isPending, error } = authClient.useSession()
+
+  const displayName = session?.user.name || (isPending ? "Loading..." : "Not signed in")
+  const displayEmail = session?.user.email || (error ? "Unable to load account" : "")
+  const avatar = session?.user.image || undefined
+  const initials = session?.user.name?.trim().charAt(0).toUpperCase() || "?"
+
+  async function handleSignOut() {
+    const { error: signOutError } = await authClient.signOut()
+
+    if (!signOutError) {
+      router.replace("/signin")
+      router.refresh()
+    }
+  }
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -42,12 +56,12 @@ export function NavUser({
             }
           >
             <Avatar>
-              <AvatarImage src={user.avatar} alt={user.name} />
-              <AvatarFallback>CN</AvatarFallback>
+              <AvatarImage src={avatar} alt={`${displayName} avatar`} />
+              <AvatarFallback>{initials}</AvatarFallback>
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-medium">{user.name}</span>
-              <span className="truncate text-xs">{user.email}</span>
+              <span className="truncate font-medium">{displayName}</span>
+              <span className="truncate text-xs">{displayEmail}</span>
             </div>
             <ChevronsUpDownIcon className="ml-auto size-4" />
           </DropdownMenuTrigger>
@@ -61,12 +75,12 @@ export function NavUser({
               <DropdownMenuLabel className="p-0 font-normal">
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                   <Avatar>
-                    <AvatarImage src={user.avatar} alt={user.name} />
-                    <AvatarFallback>CN</AvatarFallback>
+                    <AvatarImage src={avatar} alt={`${displayName} avatar`} />
+                    <AvatarFallback>{initials}</AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-medium">{user.name}</span>
-                    <span className="truncate text-xs">{user.email}</span>
+                    <span className="truncate font-medium">{displayName}</span>
+                    <span className="truncate text-xs">{displayEmail}</span>
                   </div>
                 </div>
               </DropdownMenuLabel>
@@ -89,19 +103,25 @@ export function NavUser({
               <DropdownMenuItem>
                 <CreditCardIcon
                 />
-                Billing
+                <Link href="/billing">  Billing </Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <BellIcon
                 />
-                Notifications
+             <Link href="/notifications">  Notifications </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => void handleSignOut()}>
               <LogOutIcon
               />
               Log out
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => void handleSignOut()}>
+              <ModeToggle
+              />
+              Change Theme
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

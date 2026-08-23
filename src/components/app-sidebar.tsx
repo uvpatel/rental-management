@@ -13,168 +13,194 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
-import { GalleryVerticalEndIcon, AudioLinesIcon, TerminalIcon, TerminalSquareIcon, BotIcon, BookOpenIcon, Settings2Icon, FrameIcon, PieChartIcon, MapIcon } from "lucide-react"
-
+import {
+  AudioLinesIcon,
+  CalendarRangeIcon,
+  ChartNoAxesCombinedIcon,
+  GalleryVerticalEndIcon,
+  LayoutDashboardIcon,
+  PackageIcon,
+  ReceiptTextIcon,
+  Settings2Icon,
+  TerminalIcon,
+  UsersIcon,
+  WarehouseIcon,
+} from "lucide-react"
 // This is sample data.
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   teams: [
     {
-      name: "Acme Inc",
+      name: "RentalFlow Inc",
       logo: (
-        <GalleryVerticalEndIcon
-        />
+        <GalleryVerticalEndIcon />
       ),
       plan: "Enterprise",
     },
     {
-      name: "Acme Corp.",
+      name: "Rental Corp.",
       logo: (
-        <AudioLinesIcon
-        />
+        <AudioLinesIcon />
+      ),
+      plan: "Business",
+    },
+    {
+      name: "QuickRent Ltd.",
+      logo: (
+        <TerminalIcon />
       ),
       plan: "Startup",
     },
-    {
-      name: "Evil Corp.",
-      logo: (
-        <TerminalIcon
-        />
-      ),
-      plan: "Free",
-    },
   ],
+
   navMain: [
     {
-      title: "Playground",
+      title: "Rentals",
       url: "#",
       icon: (
-        <TerminalSquareIcon
-        />
+        <CalendarRangeIcon />
       ),
       isActive: true,
       items: [
         {
-          title: "History",
-          url: "#",
+          title: "Quotations",
+          url: "/dashboard/quotations",
         },
         {
-          title: "Starred",
-          url: "#",
+          title: "Rental Orders",
+          url: "/dashboard/rentals",
         },
         {
-          title: "Settings",
-          url: "#",
+          title: "Reservations",
+          url: "/dashboard/reservations",
         },
       ],
     },
+
     {
-      title: "Models",
+      title: "Catalog",
       url: "#",
       icon: (
-        <BotIcon
-        />
+        <PackageIcon />
       ),
       items: [
         {
-          title: "Genesis",
-          url: "#",
+          title: "Products",
+          url: "/dashboard/products",
         },
         {
-          title: "Explorer",
-          url: "#",
+          title: "Product Attributes",
+          url: "/dashboard/attributes",
         },
         {
-          title: "Quantum",
-          url: "#",
+          title: "Rental Pricing",
+          url: "/dashboard/rental-rates",
         },
       ],
     },
+
     {
-      title: "Documentation",
+      title: "Inventory",
       url: "#",
       icon: (
-        <BookOpenIcon
-        />
+        <WarehouseIcon />
       ),
       items: [
         {
-          title: "Introduction",
-          url: "#",
+          title: "Inventory",
+          url: "/dashboard/inventory",
         },
         {
-          title: "Get Started",
-          url: "#",
+          title: "Pickups",
+          url: "/dashboard/pickups",
         },
         {
-          title: "Tutorials",
-          url: "#",
+          title: "Returns",
+          url: "/dashboard/returns",
         },
         {
-          title: "Changelog",
-          url: "#",
+          title: "Stock Movements",
+          url: "/dashboard/stock-movements",
         },
       ],
     },
+
+    {
+      title: "Finance",
+      url: "#",
+      icon: (
+        <ReceiptTextIcon />
+      ),
+      items: [
+        {
+          title: "Invoices",
+          url: "/dashboard/invoices",
+        },
+        {
+          title: "Payments",
+          url: "/dashboard/payments",
+        },
+        {
+          title: "Security Deposits",
+          url: "/dashboard/deposits",
+        },
+        {
+          title: "Taxes",
+          url: "/dashboard/taxes",
+        },
+      ],
+    },
+
     {
       title: "Settings",
       url: "#",
       icon: (
-        <Settings2Icon
-        />
+        <Settings2Icon />
       ),
       items: [
         {
           title: "General",
-          url: "#",
+          url: "/dashboard/settings",
         },
         {
-          title: "Team",
-          url: "#",
+          title: "Company",
+          url: "/dashboard/settings/company",
         },
         {
-          title: "Billing",
-          url: "#",
+          title: "Team & Roles",
+          url: "/dashboard/settings/team",
         },
         {
-          title: "Limits",
-          url: "#",
+          title: "Rental Settings",
+          url: "/dashboard/settings/rental",
         },
       ],
     },
   ],
+
   projects: [
     {
-      name: "Design Engineering",
-      url: "#",
+      name: "Dashboard",
+      url: "/dashboard",
       icon: (
-        <FrameIcon
-        />
+        <LayoutDashboardIcon />
       ),
     },
     {
-      name: "Sales & Marketing",
-      url: "#",
+      name: "Customers",
+      url: "/dashboard/customers",
       icon: (
-        <PieChartIcon
-        />
+        <UsersIcon />
       ),
     },
     {
-      name: "Travel",
-      url: "#",
+      name: "Reports & Analytics",
+      url: "/dashboard/reports",
       icon: (
-        <MapIcon
-        />
+        <ChartNoAxesCombinedIcon />
       ),
     },
   ],
 }
-
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -186,7 +212,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
