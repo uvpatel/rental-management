@@ -18,6 +18,29 @@ import {
 } from "@/components/ui/sidebar"
 import data from "./data.json"
 
+
+/* 
+Header
+├── "Dashboard"
+├── Date range
+└── Refresh
+
+KPI Cards
+├── Total Revenue
+├── Active Rentals
+├── Upcoming Pickups
+└── Overdue Returns
+
+Charts
+├── Revenue Overview
+└── Rental Orders Trend
+
+Operational
+├── Today's Pickups
+├── Upcoming Returns
+└── Recent Orders
+*/
+
 export default function DashboardPage() {
   return (
 <>
